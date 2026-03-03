@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using CmsObserver.Accessors;
 using CmsObserver.Accessors.Entities;
 using CmsObserver.Managers.Models;
+using Microsoft.Extensions.Logging;
 
 namespace CmsObserver.Managers;
 
@@ -11,10 +12,12 @@ public sealed class CmsEventProcessor : ICmsEventProcessor, IDisposable
     private readonly ISubject<IReadOnlyCollection<CmsEventModel>> _eventsStream;
     private readonly IDisposable _subscription;
     private readonly IEntitiesAccessor _entitiesAccessor;
+    private readonly ILogger<CmsEventProcessor> _logger;
 
-    public CmsEventProcessor(IEntitiesAccessor entitiesAccessor)
+    public CmsEventProcessor(IEntitiesAccessor entitiesAccessor, ILogger<CmsEventProcessor> logger)
     {
         _entitiesAccessor = entitiesAccessor;
+        _logger = logger;
 
         var subject = new Subject<IReadOnlyCollection<CmsEventModel>>();
         _eventsStream = Subject.Synchronize(subject);
@@ -23,7 +26,11 @@ public sealed class CmsEventProcessor : ICmsEventProcessor, IDisposable
             .Select(cmsEvent => Observable.FromAsync(ct => PersistAsync(cmsEvent, ct)))
             .Concat()
             .Subscribe(cmsEvent =>
-                Console.WriteLine($"Received CMS event: Type={cmsEvent.Type}, Id={cmsEvent.Id}, Version={cmsEvent.Version?.ToString() ?? "n/a"}, Timestamp={cmsEvent.Timestamp:O}"));
+                _logger.LogInformation("Received CMS event: Type={Type}, Id={Id}, Version={Version}, Timestamp={Timestamp}",
+                    cmsEvent.Type,
+                    cmsEvent.Id,
+                    cmsEvent.Version?.ToString() ?? "n/a",
+                    cmsEvent.Timestamp));
     }
 
     public void Enqueue(IReadOnlyCollection<CmsEventModel> events)

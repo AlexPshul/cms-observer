@@ -20,6 +20,14 @@ public sealed class InMemoryEntitiesAccessor : IEntitiesAccessor
         return Task.CompletedTask;
     }
 
+    public Task<IReadOnlyCollection<CmsEntity>> GetAllActiveAsync(CancellationToken cancellationToken = default)
+    {
+        IReadOnlyCollection<CmsEntity> entities = _entities.Values
+            .Where(entity => entity.IsActive && !entity.IsDisabledByAdmin)
+            .ToArray();
+        return Task.FromResult(entities);
+    }
+
     public Task<IReadOnlyCollection<CmsEntity>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         IReadOnlyCollection<CmsEntity> entities = _entities.Values.ToArray();

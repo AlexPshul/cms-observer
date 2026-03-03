@@ -1,0 +1,5 @@
+﻿@CmsObserver.API_HostAddress = https://localhost:7295
+
+GET {{CmsObserver.API_HostAddress}}/entities
+
+###

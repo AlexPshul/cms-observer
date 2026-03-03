@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<IEntitiesAccessor, InMemoryEntitiesAccessor>();
 builder.Services.AddSingleton<ICmsEventProcessor, CmsEventProcessor>();
+builder.Services.AddSingleton<ICmsEntitiesManager, CmsEntitiesManager>();
 
 var app = builder.Build();
 
@@ -18,5 +19,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.RegisterCmsEventsListener();
+app.RegisterEntitiesEndpoints();
 
 app.Run();

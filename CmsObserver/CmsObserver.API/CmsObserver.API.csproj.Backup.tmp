@@ -15,4 +15,8 @@
     <ProjectReference Include="..\CmsObserver.Managers\CmsObserver.Managers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+  </ItemGroup>
+
 </Project>

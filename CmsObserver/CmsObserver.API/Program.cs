@@ -1,8 +1,12 @@
-using System.Text.Json;
+using CmsObserver.Accessors;
+using CmsObserver.API;
+using CmsObserver.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton<IEntitiesAccessor, InMemoryEntitiesAccessor>();
+builder.Services.AddSingleton<ICmsEventProcessor, CmsEventProcessor>();
 
 var app = builder.Build();
 
@@ -13,13 +17,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/cms/events", async (HttpRequest request) =>
-{
-    using var document = await JsonDocument.ParseAsync(request.Body);
-    var events = document.RootElement.Clone();
-    Console.WriteLine("Received: ");
-    Console.WriteLine(document.RootElement.ToString());
-    return Results.Ok(events);
-});
+app.RegisterCmsEventsListener();
 
 app.Run();

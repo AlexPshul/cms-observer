@@ -1,7 +1,10 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path="Architecture.md" />
     <File Path="Requirements.md" />
   </Folder>
+  <Project Path="CmsObserver.Accessors/CmsObserver.Accessors.csproj" Id="4356d592-a940-4f33-9f61-d00bc9cdcbaa" />
   <Project Path="CmsObserver.API/CmsObserver.API.csproj" />
+  <Project Path="CmsObserver.Managers/CmsObserver.Managers.csproj" Id="23904062-9de9-4d56-af31-0b1bf728e0c6" />
   <Project Path="CmsObserver.Simulator/CmsObserver.Simulator.csproj" />
 </Solution>

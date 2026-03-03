@@ -1,0 +1,64 @@
+@CmsObserver.API_HostAddress = https://localhost:7295
+
+POST {{CmsObserver.API_HostAddress}}/cms/events
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "type": "publish",
+    "id": "he-who-remains",
+    "timestamp": "2026-01-01T00:40:00Z",
+    "payload": {
+      "name": "He Who Remains",
+      "actor": "Jonathan Majors",
+      "movies": ["Loki: Season 1"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "kang-the-conqueror",
+    "timestamp": "2026-01-01T00:40:01Z",
+    "payload": {
+      "name": "Kang the Conqueror",
+      "actor": "Jonathan Majors",
+      "movies": ["Ant-Man and the Wasp: Quantumania"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "immortus",
+    "timestamp": "2026-01-01T00:40:02Z",
+    "payload": {
+      "name": "Immortus",
+      "actor": "Jonathan Majors",
+      "movies": ["Ant-Man and the Wasp: Quantumania"]
+    },
+    "version": 1
+  },
+  {
+    "type": "delete",
+    "id": "he-who-remains",
+    "timestamp": "2026-01-01T00:40:03Z",
+    "payload": null,
+    "version": null
+  },
+  {
+    "type": "delete",
+    "id": "kang-the-conqueror",
+    "timestamp": "2026-01-01T00:40:04Z",
+    "payload": null,
+    "version": null
+  },
+  {
+    "type": "delete",
+    "id": "immortus",
+    "timestamp": "2026-01-01T00:40:05Z",
+    "payload": null,
+    "version": null
+  }
+]
+
+###

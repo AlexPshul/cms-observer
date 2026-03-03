@@ -1,0 +1,39 @@
+@CmsObserver.API_HostAddress = https://localhost:7295
+
+POST {{CmsObserver.API_HostAddress}}/cms/events
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "type": "publish",
+    "id": "deadpool",
+    "timestamp": "2026-01-01T00:50:00Z",
+    "payload": {
+      "name": "Silent Deadpool (Fox)",
+      "actor": "Ryan Reynolds",
+      "movies": ["X-Men Origins: Wolverine"]
+    },
+    "version": 1
+  },
+  {
+    "type": "delete",
+    "id": "deadpool",
+    "timestamp": "2026-01-01T00:50:01Z",
+    "payload": null,
+    "version": null
+  },
+  {
+    "type": "publish",
+    "id": "deadpool",
+    "timestamp": "2026-01-01T00:50:02Z",
+    "payload": {
+      "name": "Deadpool",
+      "actor": "Ryan Reynolds",
+      "movies": ["Deadpool"]
+    },
+    "version": 1
+  }
+]
+
+###

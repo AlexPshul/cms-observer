@@ -1,0 +1,32 @@
+@CmsObserver.API_HostAddress = https://localhost:7295
+
+POST {{CmsObserver.API_HostAddress}}/cms/events
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "type": "publish",
+    "id": "tchalla",
+    "timestamp": "2026-01-01T00:20:00Z",
+    "payload": {
+      "name": "Black Panther",
+      "actor": "Chadwick Boseman",
+      "movies": ["Black Panther"]
+    },
+    "version": 1
+  },
+  {
+    "type": "unPublish",
+    "id": "tchalla",
+    "timestamp": "2026-01-01T00:20:01Z",
+    "payload": {
+      "name": "Black Panther",
+      "actor": "Chadwick Boseman",
+      "movies": ["Black Panther", "Black Panther II (Cancelled)"]
+    },
+    "version": 2
+  }
+]
+
+###

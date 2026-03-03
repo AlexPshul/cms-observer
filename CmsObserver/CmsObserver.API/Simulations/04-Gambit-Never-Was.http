@@ -1,0 +1,21 @@
+@CmsObserver.API_HostAddress = https://localhost:7295
+
+POST {{CmsObserver.API_HostAddress}}/cms/events
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "type": "unPublish",
+    "id": "gambit",
+    "timestamp": "2026-01-01T00:30:00Z",
+    "payload": {
+      "name": "Gambit",
+      "actor": "Channing Tatum",
+      "movies": ["Gambit (Cancelled)"]
+    },
+    "version": 2
+  }
+]
+
+###

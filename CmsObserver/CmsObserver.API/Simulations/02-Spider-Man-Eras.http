@@ -1,0 +1,98 @@
+@CmsObserver.API_HostAddress = https://localhost:7295
+
+POST {{CmsObserver.API_HostAddress}}/cms/events
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "type": "publish",
+    "id": "spider-man",
+    "timestamp": "2026-01-01T00:10:00Z",
+    "payload": {
+      "name": "Spider-Man",
+      "actor": "Tobey Maguire",
+      "movies": ["Spider-Man"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "spider-man",
+    "timestamp": "2026-01-01T00:10:01Z",
+    "payload": {
+      "name": "Spider-Man",
+      "actor": "Tobey Maguire",
+      "movies": ["Spider-Man", "Spider-Man 2"]
+    },
+    "version": 2
+  },
+  {
+    "type": "publish",
+    "id": "spider-man",
+    "timestamp": "2026-01-01T00:10:02Z",
+    "payload": {
+      "name": "Spider-Man",
+      "actor": "Tobey Maguire",
+      "movies": ["Spider-Man", "Spider-Man 2", "Spider-Man 3"]
+    },
+    "version": 3
+  },
+  {
+    "type": "publish",
+    "id": "spider-man",
+    "timestamp": "2026-01-01T00:10:03Z",
+    "payload": {
+      "name": "Spider-Man",
+      "actor": "Andrew Garfield",
+      "movies": ["The Amazing Spider-Man"]
+    },
+    "version": 4
+  },
+  {
+    "type": "publish",
+    "id": "spider-man",
+    "timestamp": "2026-01-01T00:10:04Z",
+    "payload": {
+      "name": "Spider-Man",
+      "actor": "Andrew Garfield",
+      "movies": ["The Amazing Spider-Man", "The Amazing Spider-Man 2"]
+    },
+    "version": 5
+  },
+  {
+    "type": "publish",
+    "id": "spider-man",
+    "timestamp": "2026-01-01T00:10:05Z",
+    "payload": {
+      "name": "Spider-Man",
+      "actor": "Tom Holland",
+      "movies": ["Spider-Man: Homecoming"]
+    },
+    "version": 6
+  },
+  {
+    "type": "publish",
+    "id": "spider-man",
+    "timestamp": "2026-01-01T00:10:06Z",
+    "payload": {
+      "name": "Spider-Man",
+      "actor": "Tom Holland",
+      "movies": ["Spider-Man: Homecoming", "Spider-Man: Far From Home"]
+    },
+    "version": 7
+  },
+  {
+    "type": "publish",
+    "id": "spider-man",
+    "timestamp": "2026-01-01T00:10:07Z",
+    "payload": {
+      "name": "Spider-Man",
+      "actor": "Tom Holland",
+      "movies": ["Spider-Man: Homecoming", "Spider-Man: Far From Home", "Spider-Man: No Way Home"]
+    },
+    "version": 8
+  }
+]
+
+###

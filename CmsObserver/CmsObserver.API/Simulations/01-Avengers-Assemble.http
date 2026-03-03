@@ -1,0 +1,153 @@
+@CmsObserver.API_HostAddress = https://localhost:7295
+
+POST {{CmsObserver.API_HostAddress}}/cms/events
+Content-Type: application/json
+Accept: application/json
+
+[
+  {
+    "type": "publish",
+    "id": "iron-man",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "payload": {
+      "name": "Iron Man",
+      "actor": "Robert Downey Jr.",
+      "movies": ["Iron Man"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "hulk",
+    "timestamp": "2026-01-01T00:00:01Z",
+    "payload": {
+      "name": "Hulk",
+      "actor": "Edward Norton",
+      "movies": ["The Incredible Hulk"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "iron-man",
+    "timestamp": "2026-01-01T00:00:02Z",
+    "payload": {
+      "name": "Iron Man",
+      "actor": "Robert Downey Jr.",
+      "movies": ["Iron Man", "Iron Man 2"]
+    },
+    "version": 2
+  },
+  {
+    "type": "publish",
+    "id": "black-widow",
+    "timestamp": "2026-01-01T00:00:03Z",
+    "payload": {
+      "name": "Black Widow",
+      "actor": "Scarlett Johansson",
+      "movies": ["Iron Man 2"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "thor",
+    "timestamp": "2026-01-01T00:00:04Z",
+    "payload": {
+      "name": "Thor",
+      "actor": "Chris Hemsworth",
+      "movies": ["Thor"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "hawkeye",
+    "timestamp": "2026-01-01T00:00:05Z",
+    "payload": {
+      "name": "Hawkeye",
+      "actor": "Jeremy Renner",
+      "movies": ["Thor"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "captain-america",
+    "timestamp": "2026-01-01T00:00:06Z",
+    "payload": {
+      "name": "Captain America",
+      "actor": "Chris Evans",
+      "movies": ["Captain America: The First Avenger"]
+    },
+    "version": 1
+  },
+  {
+    "type": "publish",
+    "id": "iron-man",
+    "timestamp": "2026-01-01T00:00:07Z",
+    "payload": {
+      "name": "Iron Man",
+      "actor": "Robert Downey Jr.",
+      "movies": ["Iron Man", "Iron Man 2", "The Avengers"]
+    },
+    "version": 3
+  },
+  {
+    "type": "publish",
+    "id": "hulk",
+    "timestamp": "2026-01-01T00:00:08Z",
+    "payload": {
+      "name": "Hulk",
+      "actor": "Mark Ruffalo",
+      "movies": ["The Incredible Hulk", "The Avengers"]
+    },
+    "version": 2
+  },
+  {
+    "type": "publish",
+    "id": "black-widow",
+    "timestamp": "2026-01-01T00:00:09Z",
+    "payload": {
+      "name": "Black Widow",
+      "actor": "Scarlett Johansson",
+      "movies": ["Iron Man 2", "The Avengers"]
+    },
+    "version": 2
+  },
+  {
+    "type": "publish",
+    "id": "thor",
+    "timestamp": "2026-01-01T00:00:10Z",
+    "payload": {
+      "name": "Thor",
+      "actor": "Chris Hemsworth",
+      "movies": ["Thor", "The Avengers"]
+    },
+    "version": 2
+  },
+  {
+    "type": "publish",
+    "id": "hawkeye",
+    "timestamp": "2026-01-01T00:00:11Z",
+    "payload": {
+      "name": "Hawkeye",
+      "actor": "Jeremy Renner",
+      "movies": ["Thor", "The Avengers"]
+    },
+    "version": 2
+  },
+  {
+    "type": "publish",
+    "id": "captain-america",
+    "timestamp": "2026-01-01T00:00:12Z",
+    "payload": {
+      "name": "Captain America",
+      "actor": "Chris Evans",
+      "movies": ["Captain America: The First Avenger", "The Avengers"]
+    },
+    "version": 2
+  }
+]
+
+###

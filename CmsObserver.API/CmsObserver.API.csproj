@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CmsObserver.Accessors\CmsObserver.Accessors.csproj" />
     <ProjectReference Include="..\CmsObserver.Managers\CmsObserver.Managers.csproj" />
+    <ProjectReference Include="..\CmsObserver.Users\CmsObserver.Users.csproj" />
   </ItemGroup>
 
 </Project>

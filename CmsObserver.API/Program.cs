@@ -2,18 +2,23 @@ using CmsObserver.Accessors;
 using CmsObserver.API;
 using CmsObserver.API.Authentication;
 using CmsObserver.Managers;
+using CmsObserver.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("CmsEntities")
     ?? throw new InvalidOperationException("Connection string 'CmsEntities' is missing.");
+var usersConnectionString = builder.Configuration.GetConnectionString("CmsUsers")
+    ?? throw new InvalidOperationException("Connection string 'CmsUsers' is missing.");
 
 builder.Services.AddOpenApi();
 builder.Services.AddDbContextFactory<CmsEntitiesDbContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContextFactory<CmsUsersDbContext>(options => options.UseSqlite(usersConnectionString));
 builder.Services.AddSingleton<IEntitiesAccessor, PersistentEntitiesAccessor>();
 builder.Services.AddSingleton<ICmsEventProcessor, CmsEventProcessor>();
 builder.Services.AddSingleton<ICmsEntitiesManager, CmsEntitiesManager>();
+builder.Services.AddSingleton<IUserCredentialsStore, EfUserCredentialsStore>();
 builder.Services
     .AddOptions<CmsBasicAuthOptions>()
     .Bind(builder.Configuration.GetSection(CmsBasicAuthOptions.SectionName))
@@ -21,7 +26,8 @@ builder.Services
     .ValidateOnStart();
 builder.Services
     .AddAuthentication(CmsAuthenticationConstants.Scheme)
-    .AddScheme<AuthenticationSchemeOptions, CmsBasicAuthenticationHandler>(CmsAuthenticationConstants.Scheme, null);
+    .AddScheme<AuthenticationSchemeOptions, CmsBasicAuthenticationHandler>(CmsAuthenticationConstants.Scheme, null)
+    .AddScheme<AuthenticationSchemeOptions, CmsObserverAuthenticationHandler>(CmsAuthenticationConstants.UsersScheme, null);
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(CmsAuthenticationConstants.CmsEventsIngestionPolicy, policy =>
@@ -38,6 +44,13 @@ await using (var dbContext = await app.Services
                    .CreateDbContextAsync())
 {
     await dbContext.Database.EnsureCreatedAsync();
+}
+
+await using (var usersDbContext = await app.Services
+                   .GetRequiredService<IDbContextFactory<CmsUsersDbContext>>()
+                   .CreateDbContextAsync())
+{
+    await usersDbContext.Database.EnsureCreatedAsync();
 }
 
 if (app.Environment.IsDevelopment())

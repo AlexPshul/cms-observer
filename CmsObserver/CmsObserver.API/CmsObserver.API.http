@@ -4,6 +4,10 @@ GET {{CmsObserver.API_HostAddress}}/entities
 
 ###
 
+GET {{CmsObserver.API_HostAddress}}/entities?includeUnpublished=true
+
+###
+
 @CmsObserver.EntityToDisable = iron-man
 
 POST {{CmsObserver.API_HostAddress}}/admin/entities/{{CmsObserver.EntityToDisable}}/disable

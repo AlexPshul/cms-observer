@@ -8,9 +8,9 @@ public static class EntitiesEndpointExtensions
 {
     public static WebApplication RegisterEntitiesEndpoints(this WebApplication app)
     {
-        app.MapGet("/entities", async (ICmsEntitiesManager manager, CancellationToken cancellationToken) =>
+        app.MapGet("/entities", async (ICmsEntitiesManager manager, CancellationToken cancellationToken, bool includeUnpublished = false) =>
         {
-            var entities = await manager.ListAsync(includeUnpublished: false, cancellationToken);
+            var entities = await manager.ListAsync(includeUnpublished, cancellationToken);
             var result = entities
                 .Select(entity => new CmsEntityDto(
                     entity.Id,

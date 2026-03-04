@@ -1,8 +1,10 @@
 @CmsObserver.API_HostAddress = https://localhost:7295
+@CmsObserver.CmsBasicAuth = Basic Y21zaG9va3VzZXIxOjViZTU3ZjUwLTExOTQtNDU5Mi1hMTg1LWRjZjI1YjczYWNlNw==
 
 POST {{CmsObserver.API_HostAddress}}/cms/events
 Content-Type: application/json
 Accept: application/json
+Authorization: {{CmsObserver.CmsBasicAuth}}
 
 [
   {

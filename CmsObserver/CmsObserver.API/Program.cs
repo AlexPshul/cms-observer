@@ -1,6 +1,8 @@
 using CmsObserver.Accessors;
 using CmsObserver.API;
+using CmsObserver.API.Authentication;
 using CmsObserver.Managers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,22 @@ builder.Services.AddDbContextFactory<CmsEntitiesDbContext>(options => options.Us
 builder.Services.AddSingleton<IEntitiesAccessor, PersistentEntitiesAccessor>();
 builder.Services.AddSingleton<ICmsEventProcessor, CmsEventProcessor>();
 builder.Services.AddSingleton<ICmsEntitiesManager, CmsEntitiesManager>();
+builder.Services
+    .AddOptions<CmsBasicAuthOptions>()
+    .Bind(builder.Configuration.GetSection(CmsBasicAuthOptions.SectionName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+builder.Services
+    .AddAuthentication(CmsAuthenticationConstants.Scheme)
+    .AddScheme<AuthenticationSchemeOptions, CmsBasicAuthenticationHandler>(CmsAuthenticationConstants.Scheme, null);
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(CmsAuthenticationConstants.CmsEventsIngestionPolicy, policy =>
+    {
+        policy.AuthenticationSchemes.Add(CmsAuthenticationConstants.Scheme);
+        policy.RequireAuthenticatedUser();
+    });
+});
 
 var app = builder.Build();
 
@@ -28,6 +46,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.RegisterCmsEventsListener();
 app.RegisterEntitiesEndpoints();

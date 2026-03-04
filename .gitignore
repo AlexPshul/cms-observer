@@ -55,3 +55,16 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Local database files
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+
+# SQLite variants and temp files
+*.sqlite
+*.sqlite3
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite-journal

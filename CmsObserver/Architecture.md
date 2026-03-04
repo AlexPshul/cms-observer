@@ -17,7 +17,7 @@
 
 ### CmsObserver.Accessors
 - `IEntitiesAccessor` abstraction
-- `InMemoryEntitiesAccessor` implementation
+- `PersistentEntitiesAccessor` implementation
 - Pure data access logic
 - No business rules
 

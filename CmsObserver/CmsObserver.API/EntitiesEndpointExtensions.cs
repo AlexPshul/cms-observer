@@ -23,6 +23,16 @@ public static class EntitiesEndpointExtensions
             return Results.Ok(result);
         });
 
+        app.MapPost("/admin/entities/{id}/disable", async (string id, ICmsEntitiesManager manager, CancellationToken cancellationToken) =>
+        {
+            if (string.IsNullOrWhiteSpace(id)) return Results.BadRequest();
+
+            var disabled = await manager.DisableAsync(id, cancellationToken);
+            if (!disabled) return Results.NotFound();
+
+            return Results.NoContent();
+        });
+
         return app;
     }
 

@@ -3,3 +3,9 @@
 GET {{CmsObserver.API_HostAddress}}/entities
 
 ###
+
+@CmsObserver.EntityToDisable = iron-man
+
+POST {{CmsObserver.API_HostAddress}}/admin/entities/{{CmsObserver.EntityToDisable}}/disable
+
+###

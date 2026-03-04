@@ -29,4 +29,6 @@ public sealed class CmsEntitiesManager : ICmsEntitiesManager
             })
             .ToArray();
     }
+
+    public Task<bool> DisableAsync(string id, CancellationToken cancellationToken = default) => _entitiesAccessor.DisableByAdminAsync(id, cancellationToken);
 }

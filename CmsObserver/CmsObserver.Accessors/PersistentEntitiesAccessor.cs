@@ -48,6 +48,19 @@ public sealed class PersistentEntitiesAccessor : IEntitiesAccessor
         return await dbContext.Entities.AsNoTracking().ToArrayAsync(cancellationToken);
     }
 
+    public async Task<bool> DisableByAdminAsync(string id, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("Entity id is required.", nameof(id));
+
+        await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var affectedRows = await dbContext.Entities
+            .Where(entity => entity.Id == id)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(entity => entity.IsDisabledByAdmin, true), cancellationToken);
+
+        return affectedRows > 0;
+    }
+
     public async Task<bool> DeleteAsync(string id, DateTimeOffset eventTimestampUtc, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("Entity id is required.", nameof(id));

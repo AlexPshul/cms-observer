@@ -23,8 +23,16 @@ public sealed class CmsEventProcessor : ICmsEventProcessor, IDisposable
         _eventsStream = Subject.Synchronize(subject);
         _subscription = _eventsStream
             .SelectMany(batch => batch)
-            .Select(cmsEvent => Observable.FromAsync(ct => PersistAsync(cmsEvent, ct)))
-            .Concat()
+            .Select(cmsEvent =>
+                Observable
+                    .FromAsync(ct => PersistAsync(cmsEvent, ct))
+                    .Retry(3)
+                    .Catch<CmsEventModel, Exception>(ex =>
+                    {
+                        _logger.LogError(ex, "Failed to process CMS event with Id {Id}", cmsEvent.Id);
+                        return Observable.Empty<CmsEventModel>();
+                    }))
+            .Concat()   
             .Subscribe(cmsEvent =>
                 _logger.LogInformation("Received CMS event: Type={Type}, Id={Id}, Version={Version}, Timestamp={Timestamp}",
                     cmsEvent.Type,

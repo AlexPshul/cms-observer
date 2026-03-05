@@ -16,7 +16,7 @@ public sealed class UnpublishVisibilityApprovalTests(CmsObserverApiFactory facto
         var unpublishTimestamp = DateTimeOffset.Parse("2024-01-01T00:01:00Z");
         var entityId = "entity-unpublish-1";
 
-        await IngestAsync(client, factory.CmsCredentials, new
+        await CmsEventsIngestionHelper.IngestAsync(client, factory.CmsCredentials, new
         {
             type = "publish",
             id = entityId,
@@ -25,7 +25,7 @@ public sealed class UnpublishVisibilityApprovalTests(CmsObserverApiFactory facto
             timestamp = publishTimestamp
         });
 
-        await IngestAsync(client, factory.CmsCredentials, new
+        await CmsEventsIngestionHelper.IngestAsync(client, factory.CmsCredentials, new
         {
             type = "unpublish",
             id = entityId,
@@ -34,14 +34,17 @@ public sealed class UnpublishVisibilityApprovalTests(CmsObserverApiFactory facto
             timestamp = unpublishTimestamp
         });
 
-        var userEntities = await WaitForEntitiesAsync(client, factory.ObserverUserCredentials, entities =>
-            entities.GetArrayLength() == 0);
+        var userEntities = await PollingHelper.WaitForAsync(
+            () => ApiRequestHelper.GetEntitiesSnapshotAsync(client, factory.ObserverUserCredentials),
+            current => JsonDocument.Parse(current.RawBody).RootElement.GetArrayLength() == 0);
 
-        var adminDefault = await WaitForEntitiesAsync(client, factory.ObserverAdminCredentials, entities =>
-            entities.GetArrayLength() == 0);
+        var adminDefault = await PollingHelper.WaitForAsync(
+            () => ApiRequestHelper.GetEntitiesSnapshotAsync(client, factory.ObserverAdminCredentials),
+            current => JsonDocument.Parse(current.RawBody).RootElement.GetArrayLength() == 0);
 
-        var adminIncludingUnpublished = await WaitForEntitiesAsync(client, factory.ObserverAdminCredentials, entities =>
-            entities.EnumerateArray().Any(x => x.GetProperty("id").GetString() == entityId), includeUnpublished: true);
+        var adminIncludingUnpublished = await PollingHelper.WaitForAsync(
+            () => ApiRequestHelper.GetEntitiesSnapshotAsync(client, factory.ObserverAdminCredentials, true),
+            current => JsonDocument.Parse(current.RawBody).RootElement.EnumerateArray().Any(x => x.GetProperty("id").GetString() == entityId));
 
         ApprovalJson.Verify(new
         {
@@ -51,51 +54,4 @@ public sealed class UnpublishVisibilityApprovalTests(CmsObserverApiFactory facto
         });
     }
 
-    private static async Task IngestAsync(HttpClient client, TestCredentials credentials, object cmsEvent)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Post, "/cms/events")
-        {
-            Content = JsonContent.Create(new[] { cmsEvent })
-        };
-        request.Headers.Authorization = CmsObserverApiFactory.CreateBasicAuthHeader(credentials);
-
-        using var response = await client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-    }
-
-    private static async Task<EntitiesSnapshot> WaitForEntitiesAsync(
-        HttpClient client,
-        TestCredentials credentials,
-        Func<JsonElement, bool> condition,
-        bool includeUnpublished = false)
-    {
-        for (var attempt = 0; attempt < 30; attempt++)
-        {
-            var current = await GetEntitiesSnapshotAsync(client, credentials, includeUnpublished);
-            if (condition(current.Body)) return current;
-
-            await Task.Delay(100);
-        }
-
-        return await GetEntitiesSnapshotAsync(client, credentials, includeUnpublished);
-    }
-
-    private static async Task<EntitiesSnapshot> GetEntitiesSnapshotAsync(HttpClient client, TestCredentials credentials, bool includeUnpublished)
-    {
-        var url = includeUnpublished ? "/entities?includeUnpublished=true" : "/entities";
-        using var request = new HttpRequestMessage(HttpMethod.Get, url);
-        request.Headers.Authorization = CmsObserverApiFactory.CreateBasicAuthHeader(credentials);
-
-        using var response = await client.SendAsync(request);
-        var body = await response.Content.ReadAsStringAsync();
-
-        return new EntitiesSnapshot(
-            url,
-            (int)response.StatusCode,
-            response.StatusCode.ToString(),
-            JsonDocument.Parse(body).RootElement,
-            body);
-    }
-
-    private sealed record EntitiesSnapshot(string Url, int StatusCode, string Status, JsonElement Body, string RawBody);
 }

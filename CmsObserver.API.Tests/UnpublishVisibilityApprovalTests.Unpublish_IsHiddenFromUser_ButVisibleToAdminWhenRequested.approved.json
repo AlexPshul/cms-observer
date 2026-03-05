@@ -8,8 +8,6 @@
         
     "Status":  "OK",
         
-    "Body":  [],
-        
     "RawBody":  "[]"
   
     },
@@ -22,8 +20,6 @@
         
     "Status":  "OK",
         
-    "Body":  [],
-        
     "RawBody":  "[]"
   
     },
@@ -35,30 +31,6 @@
     "StatusCode":  200,
         
     "Status":  "OK",
-        
-    "Body":  [
-            
-      {
-                
-        "id":  "entity-unpublish-1",
-                
-        "version":  2,
-                
-        "payload":  {
-                    
-          "title":  "Entity unpublished",
-                    
-          "category":  "draft"
-        
-                },
-                
-        "timestampUtc":  "2024-01-01T00:01:00\u002B00:00",
-                
-        "isActive":  false
-      
-            }
-    
-        ],
         
     "RawBody":  "[{\u0022id\u0022:\u0022entity-unpublish-1\u0022,\u0022version\u0022:2,\u0022payload\u0022:{\u0022title\u0022:\u0022Entity unpublished\u0022,\u0022category\u0022:\u0022draft\u0022},\u0022timestampUtc\u0022:\u00222024-01-01T00:01:00\u002B00:00\u0022,\u0022isActive\u0022:false}]"
   

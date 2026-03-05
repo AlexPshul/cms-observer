@@ -14,7 +14,7 @@ public sealed class UnpublishWithoutPriorPublishApprovalTests(CmsObserverApiFact
 
         var entityId = "entity-unpublish-only-1";
 
-        await IngestAsync(client, factory.CmsCredentials, new
+        await CmsEventsIngestionHelper.IngestAsync(client, factory.CmsCredentials, new
         {
             type = "unpublish",
             id = entityId,
@@ -23,11 +23,13 @@ public sealed class UnpublishWithoutPriorPublishApprovalTests(CmsObserverApiFact
             timestamp = DateTimeOffset.Parse("2024-01-01T00:05:00Z")
         });
 
-        var userEntities = await WaitForStateAsync(client, factory.ObserverUserCredentials, "/entities", body =>
-            MatchesArray(body, array => array.GetArrayLength() == 0));
+        var userEntities = await PollingHelper.WaitForAsync(
+            () => ApiRequestHelper.GetEntitiesSnapshotAsync(client, factory.ObserverUserCredentials),
+            snapshot => MatchesArray(snapshot.RawBody, array => array.GetArrayLength() == 0));
 
-        var adminEntities = await WaitForStateAsync(client, factory.ObserverAdminCredentials, "/entities?includeUnpublished=true", body =>
-            MatchesArray(body, array =>
+        var adminEntities = await PollingHelper.WaitForAsync(
+            () => ApiRequestHelper.GetEntitiesSnapshotAsync(client, factory.ObserverAdminCredentials, true),
+            snapshot => MatchesArray(snapshot.RawBody, array =>
             {
                 if (array.GetArrayLength() != 1) return false;
 
@@ -42,42 +44,6 @@ public sealed class UnpublishWithoutPriorPublishApprovalTests(CmsObserverApiFact
             UserEntities = userEntities,
             AdminEntitiesIncludingUnpublished = adminEntities
         });
-    }
-
-    private static async Task IngestAsync(HttpClient client, TestCredentials credentials, object cmsEvent)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Post, "/cms/events")
-        {
-            Content = JsonContent.Create(new[] { cmsEvent })
-        };
-        request.Headers.Authorization = CmsObserverApiFactory.CreateBasicAuthHeader(credentials);
-
-        using var response = await client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-    }
-
-    private static async Task<EntitiesSnapshot> WaitForStateAsync(HttpClient client, TestCredentials credentials, string url, Func<string, bool> condition)
-    {
-        for (var attempt = 0; attempt < 30; attempt++)
-        {
-            var snapshot = await GetSnapshotAsync(client, credentials, url);
-            if (condition(snapshot.RawBody)) return snapshot;
-
-            await Task.Delay(100);
-        }
-
-        return await GetSnapshotAsync(client, credentials, url);
-    }
-
-    private static async Task<EntitiesSnapshot> GetSnapshotAsync(HttpClient client, TestCredentials credentials, string url)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Get, url);
-        request.Headers.Authorization = CmsObserverApiFactory.CreateBasicAuthHeader(credentials);
-
-        using var response = await client.SendAsync(request);
-        var body = await response.Content.ReadAsStringAsync();
-
-        return new EntitiesSnapshot(url, (int)response.StatusCode, response.StatusCode.ToString(), body);
     }
 
     private static bool MatchesArray(string body, Func<JsonElement, bool> predicate)
@@ -95,5 +61,4 @@ public sealed class UnpublishWithoutPriorPublishApprovalTests(CmsObserverApiFact
         }
     }
 
-    private sealed record EntitiesSnapshot(string Url, int StatusCode, string Status, string RawBody);
 }

@@ -14,7 +14,7 @@ public sealed class AdminDisableApprovalTests(CmsObserverApiFactory factory) : I
 
         var entityId = "entity-disable-1";
 
-        await IngestAsync(client, factory.CmsCredentials, new
+        await CmsEventsIngestionHelper.IngestAsync(client, factory.CmsCredentials, new
         {
             type = "publish",
             id = entityId,
@@ -26,11 +26,13 @@ public sealed class AdminDisableApprovalTests(CmsObserverApiFactory factory) : I
         var nonAdminDisable = await DisableAsync(client, factory.ObserverUserCredentials, entityId);
         var adminDisable = await DisableAsync(client, factory.ObserverAdminCredentials, entityId);
 
-        var userEntities = await WaitForEntitiesAsync(client, factory.ObserverUserCredentials, "/entities", body =>
-            MatchesArray(body, array => array.GetArrayLength() == 0));
+        var userEntities = await PollingHelper.WaitForAsync(
+            () => ApiRequestHelper.GetEntitiesSnapshotAsync(client, factory.ObserverUserCredentials),
+            snapshot => MatchesArray(snapshot.RawBody, array => array.GetArrayLength() == 0));
 
-        var adminEntities = await WaitForEntitiesAsync(client, factory.ObserverAdminCredentials, "/entities?includeUnpublished=true", body =>
-            MatchesArray(body, array => array.EnumerateArray().Any(x => x.GetProperty("id").GetString() == entityId)));
+        var adminEntities = await PollingHelper.WaitForAsync(
+            () => ApiRequestHelper.GetEntitiesSnapshotAsync(client, factory.ObserverAdminCredentials, true),
+            snapshot => MatchesArray(snapshot.RawBody, array => array.EnumerateArray().Any(x => x.GetProperty("id").GetString() == entityId)));
 
         ApprovalJson.Verify(new
         {
@@ -39,18 +41,6 @@ public sealed class AdminDisableApprovalTests(CmsObserverApiFactory factory) : I
             UserEntities = userEntities,
             AdminEntitiesIncludingUnpublished = adminEntities
         });
-    }
-
-    private static async Task IngestAsync(HttpClient client, TestCredentials credentials, object cmsEvent)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Post, "/cms/events")
-        {
-            Content = JsonContent.Create(new[] { cmsEvent })
-        };
-        request.Headers.Authorization = CmsObserverApiFactory.CreateBasicAuthHeader(credentials);
-
-        using var response = await client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
     }
 
     private static async Task<object> DisableAsync(HttpClient client, TestCredentials credentials, string entityId)
@@ -65,30 +55,6 @@ public sealed class AdminDisableApprovalTests(CmsObserverApiFactory factory) : I
             StatusCode = (int)response.StatusCode,
             Status = response.StatusCode.ToString()
         };
-    }
-
-    private static async Task<EntitiesSnapshot> WaitForEntitiesAsync(HttpClient client, TestCredentials credentials, string url, Func<string, bool> condition)
-    {
-        for (var attempt = 0; attempt < 30; attempt++)
-        {
-            var snapshot = await GetEntitiesAsync(client, credentials, url);
-            if (condition(snapshot.RawBody)) return snapshot;
-
-            await Task.Delay(100);
-        }
-
-        return await GetEntitiesAsync(client, credentials, url);
-    }
-
-    private static async Task<EntitiesSnapshot> GetEntitiesAsync(HttpClient client, TestCredentials credentials, string url)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Get, url);
-        request.Headers.Authorization = CmsObserverApiFactory.CreateBasicAuthHeader(credentials);
-
-        using var response = await client.SendAsync(request);
-        var body = await response.Content.ReadAsStringAsync();
-
-        return new EntitiesSnapshot(url, (int)response.StatusCode, response.StatusCode.ToString(), body);
     }
 
     private static bool MatchesArray(string body, Func<JsonElement, bool> predicate)
@@ -106,5 +72,4 @@ public sealed class AdminDisableApprovalTests(CmsObserverApiFactory factory) : I
         }
     }
 
-    private sealed record EntitiesSnapshot(string Url, int StatusCode, string Status, string RawBody);
 }

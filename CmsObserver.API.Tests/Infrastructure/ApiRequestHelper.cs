@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace CmsObserver.API.Tests.Infrastructure;
 
 public static class ApiRequestHelper
@@ -11,6 +13,7 @@ public static class ApiRequestHelper
         using var response = await client.SendAsync(request);
         var body = await response.Content.ReadAsStringAsync();
 
-        return new ApiSnapshot(url, (int)response.StatusCode, response.StatusCode.ToString(), body);
+        using var jsonDocument = JsonDocument.Parse(body);
+        return new ApiSnapshot(url, (int)response.StatusCode, response.StatusCode.ToString(), jsonDocument.RootElement.Clone());
     }
 }

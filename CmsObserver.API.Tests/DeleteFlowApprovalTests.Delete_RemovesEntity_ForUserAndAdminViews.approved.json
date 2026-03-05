@@ -8,7 +8,7 @@
         
     "Status":  "OK",
         
-    "RawBody":  "[]"
+    "Body":  []
   
     },
     
@@ -20,7 +20,7 @@
         
     "Status":  "OK",
         
-    "RawBody":  "[]"
+    "Body":  []
   
     }
 

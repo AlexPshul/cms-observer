@@ -12,7 +12,27 @@
         
     "Status":  "OK",
         
-    "RawBody":  "[{\u0022id\u0022:\u0022batch-A\u0022,\u0022version\u0022:1,\u0022payload\u0022:{\u0022title\u0022:\u0022A active\u0022},\u0022timestampUtc\u0022:\u00222024-01-01T00:00:00\u002B00:00\u0022,\u0022isActive\u0022:true}]"
+    "Body":  [
+            
+      {
+                
+        "id":  "batch-A",
+                
+        "version":  1,
+                
+        "payload":  {
+                    
+          "title":  "A active"
+        
+                },
+                
+        "timestampUtc":  "2024-01-01T00:00:00\u002B00:00",
+                
+        "isActive":  true
+      
+            }
+    
+        ]
   
     },
     
@@ -24,7 +44,45 @@
         
     "Status":  "OK",
         
-    "RawBody":  "[{\u0022id\u0022:\u0022batch-A\u0022,\u0022version\u0022:1,\u0022payload\u0022:{\u0022title\u0022:\u0022A active\u0022},\u0022timestampUtc\u0022:\u00222024-01-01T00:00:00\u002B00:00\u0022,\u0022isActive\u0022:true},{\u0022id\u0022:\u0022batch-B\u0022,\u0022version\u0022:2,\u0022payload\u0022:{\u0022title\u0022:\u0022B inactive\u0022},\u0022timestampUtc\u0022:\u00222024-01-01T00:01:00\u002B00:00\u0022,\u0022isActive\u0022:false}]"
+    "Body":  [
+            
+      {
+                
+        "id":  "batch-A",
+                
+        "version":  1,
+                
+        "payload":  {
+                    
+          "title":  "A active"
+        
+                },
+                
+        "timestampUtc":  "2024-01-01T00:00:00\u002B00:00",
+                
+        "isActive":  true
+      
+            },
+            
+      {
+                
+        "id":  "batch-B",
+                
+        "version":  2,
+                
+        "payload":  {
+                    
+          "title":  "B inactive"
+        
+                },
+                
+        "timestampUtc":  "2024-01-01T00:01:00\u002B00:00",
+                
+        "isActive":  false
+      
+            }
+    
+        ]
   
     }
 

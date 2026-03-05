@@ -1,0 +1,43 @@
+﻿{
+    
+  "NonAdminDisable":  {
+        
+    "StatusCode":  403,
+        
+    "Status":  "Forbidden"
+  
+    },
+    
+  "AdminDisable":  {
+        
+    "StatusCode":  204,
+        
+    "Status":  "NoContent"
+  
+    },
+    
+  "UserEntities":  {
+        
+    "Url":  "/entities",
+        
+    "StatusCode":  200,
+        
+    "Status":  "OK",
+        
+    "RawBody":  "[]"
+  
+    },
+    
+  "AdminEntitiesIncludingUnpublished":  {
+        
+    "Url":  "/entities?includeUnpublished=true",
+        
+    "StatusCode":  200,
+        
+    "Status":  "OK",
+        
+    "RawBody":  "[{\u0022id\u0022:\u0022entity-disable-1\u0022,\u0022version\u0022:1,\u0022payload\u0022:{\u0022title\u0022:\u0022Disable candidate\u0022},\u0022timestampUtc\u0022:\u00222024-01-01T00:00:00\u002B00:00\u0022,\u0022isActive\u0022:true}]"
+  
+    }
+
+}

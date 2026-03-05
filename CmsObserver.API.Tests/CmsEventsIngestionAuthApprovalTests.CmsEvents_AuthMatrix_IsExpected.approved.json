@@ -1,0 +1,39 @@
+﻿[
+    
+  {
+        
+    "Case":  "missing-auth",
+        
+    "StatusCode":  401,
+        
+    "Status":  "Unauthorized",
+        
+    "WwwAuthenticate":  "Basic realm=\u0022cms-events\u0022"
+  
+    },
+    
+  {
+        
+    "Case":  "invalid-auth",
+        
+    "StatusCode":  401,
+        
+    "Status":  "Unauthorized",
+        
+    "WwwAuthenticate":  "Basic realm=\u0022cms-events\u0022"
+  
+    },
+    
+  {
+        
+    "Case":  "valid-auth",
+        
+    "StatusCode":  202,
+        
+    "Status":  "Accepted",
+        
+    "WwwAuthenticate":  ""
+  
+    }
+
+]

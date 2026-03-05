@@ -80,3 +80,5 @@ app.RegisterEntitiesEndpoints();
 
 app.Run();
 
+public partial class Program;
+

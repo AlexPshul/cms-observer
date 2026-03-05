@@ -1,0 +1,73 @@
+﻿[
+    
+  {
+        
+    "Case":  "missing-auth",
+        
+    "StatusCode":  401,
+        
+    "Status":  "Unauthorized",
+        
+    "WwwAuthenticate":  "Basic realm=\u0022cms-observer-users\u0022",
+        
+    "Body":  ""
+  
+    },
+    
+  {
+        
+    "Case":  "invalid-auth",
+        
+    "StatusCode":  401,
+        
+    "Status":  "Unauthorized",
+        
+    "WwwAuthenticate":  "Basic realm=\u0022cms-observer-users\u0022",
+        
+    "Body":  ""
+  
+    },
+    
+  {
+        
+    "Case":  "cms-auth-on-observer-endpoint",
+        
+    "StatusCode":  401,
+        
+    "Status":  "Unauthorized",
+        
+    "WwwAuthenticate":  "Basic realm=\u0022cms-observer-users\u0022",
+        
+    "Body":  ""
+  
+    },
+    
+  {
+        
+    "Case":  "observer-user-auth",
+        
+    "StatusCode":  200,
+        
+    "Status":  "OK",
+        
+    "WwwAuthenticate":  "",
+        
+    "Body":  "[]"
+  
+    },
+    
+  {
+        
+    "Case":  "observer-admin-auth",
+        
+    "StatusCode":  200,
+        
+    "Status":  "OK",
+        
+    "WwwAuthenticate":  "",
+        
+    "Body":  "[]"
+  
+    }
+
+]

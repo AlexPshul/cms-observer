@@ -1,0 +1,57 @@
+﻿[
+    
+  {
+        
+    "Case":  "malformed-json",
+        
+    "StatusCode":  400,
+        
+    "Status":  "BadRequest",
+        
+    "BodySummary":  {
+            
+      "HasBody":  true,
+            
+      "FirstLine":  "Microsoft.AspNetCore.Http.BadHttpRequestException: Failed to read parameter \u0022IReadOnlyCollection\u003CCmsEventDto\u003E events\u0022 from the request body as JSON."
+    
+        }
+  
+    },
+    
+  {
+        
+    "Case":  "invalid-event-type",
+        
+    "StatusCode":  400,
+        
+    "Status":  "BadRequest",
+        
+    "BodySummary":  {
+            
+      "HasBody":  true,
+            
+      "FirstLine":  "Microsoft.AspNetCore.Http.BadHttpRequestException: Failed to read parameter \u0022IReadOnlyCollection\u003CCmsEventDto\u003E events\u0022 from the request body as JSON."
+    
+        }
+  
+    },
+    
+  {
+        
+    "Case":  "non-json-content-type",
+        
+    "StatusCode":  415,
+        
+    "Status":  "UnsupportedMediaType",
+        
+    "BodySummary":  {
+            
+      "HasBody":  false,
+            
+      "FirstLine":  ""
+    
+        }
+  
+    }
+
+]

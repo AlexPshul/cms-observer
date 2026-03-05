@@ -1,0 +1,35 @@
+﻿{
+    
+  "IngestionStatusCode":  202,
+    
+  "IngestionStatus":  "Accepted",
+    
+  "EntitiesStatusCode":  200,
+    
+  "EntitiesStatus":  "OK",
+    
+  "Entities":  [
+        
+    {
+            
+      "id":  "entity-publish-1",
+            
+      "version":  1,
+            
+      "payload":  {
+                
+        "title":  "First entity",
+                
+        "category":  "news"
+      
+            },
+            
+      "timestampUtc":  "2024-01-01T00:00:00\u002B00:00",
+            
+      "isActive":  true
+    
+        }
+  
+    ]
+
+}

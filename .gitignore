@@ -61,6 +61,7 @@ nunit-*.xml
 *.db-shm
 *.db-wal
 *.db-journal
+!cms-observer-users.db
 
 # SQLite variants and temp files
 *.sqlite

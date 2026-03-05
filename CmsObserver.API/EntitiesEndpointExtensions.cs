@@ -1,5 +1,7 @@
 using CmsObserver.API.Dtos;
+using CmsObserver.API.Authentication;
 using CmsObserver.Managers;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace CmsObserver.API;
@@ -8,9 +10,12 @@ public static class EntitiesEndpointExtensions
 {
     public static WebApplication RegisterEntitiesEndpoints(this WebApplication app)
     {
-        app.MapGet("/entities", async (ICmsEntitiesManager manager, CancellationToken cancellationToken, bool includeUnpublished = false) =>
+        app.MapGet("/entities", async (ICmsEntitiesManager manager, ClaimsPrincipal user, CancellationToken cancellationToken, bool includeUnpublished = false) =>
         {
-            var entities = await manager.ListAsync(includeUnpublished, cancellationToken);
+            var canSeeUnpublished = user.IsInRole(CmsAuthenticationConstants.AdminRole);
+            var includeUnpublishedForRequest = canSeeUnpublished && includeUnpublished;
+
+            var entities = await manager.ListAsync(includeUnpublishedForRequest, cancellationToken);
             var result = entities
                 .Select(entity => new CmsEntityDto(
                     entity.Id,
@@ -21,7 +26,8 @@ public static class EntitiesEndpointExtensions
                 .ToArray();
 
             return Results.Ok(result);
-        });
+        })
+        .RequireAuthorization(CmsAuthenticationConstants.ObserverUserPolicy);
 
         app.MapPost("/admin/entities/{id}/disable", async (string id, ICmsEntitiesManager manager, CancellationToken cancellationToken) =>
         {
@@ -31,7 +37,8 @@ public static class EntitiesEndpointExtensions
             if (!disabled) return Results.NotFound();
 
             return Results.NoContent();
-        });
+        })
+        .RequireAuthorization(CmsAuthenticationConstants.ObserverAdminPolicy);
 
         return app;
     }
@@ -50,3 +57,4 @@ public static class EntitiesEndpointExtensions
         }
     }
 }
+

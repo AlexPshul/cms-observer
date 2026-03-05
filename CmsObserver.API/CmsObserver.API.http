@@ -1,15 +1,40 @@
 ﻿@CmsObserver.API_HostAddress = https://localhost:7295
-
-GET {{CmsObserver.API_HostAddress}}/entities
-
-###
-
-GET {{CmsObserver.API_HostAddress}}/entities?includeUnpublished=true
-
-###
-
+@CmsObserver.UserAuth = Basic b2JzZXJ2ZXJ1c2VyMDE6MDk3MDFiMmItYTY0MS00MmNhLThjYzMtN2IxMTk3ZjQzMGQz
+@CmsObserver.AdminAuth = Basic b2JzZXJ2ZXJhZG1pbjE6NTQ4MjA1MTUtZWVkNi00NDE0LTljODUtYjhlMDViNGQ1YzEy
 @CmsObserver.EntityToDisable = iron-man
 
+# 1. List entities as user
+GET {{CmsObserver.API_HostAddress}}/entities
+Authorization: {{CmsObserver.UserAuth}}
+
+###
+
+# 2. List entities as user with includeUnpublished=true (should remain non-admin scope)
+GET {{CmsObserver.API_HostAddress}}/entities?includeUnpublished=true
+Authorization: {{CmsObserver.UserAuth}}
+
+###
+
+# 3. List entities as admin
+GET {{CmsObserver.API_HostAddress}}/entities
+Authorization: {{CmsObserver.AdminAuth}}
+
+###
+
+# 4. List entities as admin with includeUnpublished=true
+GET {{CmsObserver.API_HostAddress}}/entities?includeUnpublished=true
+Authorization: {{CmsObserver.AdminAuth}}
+
+###
+
+# 5. Disable entity endpoint with user credentials (expected forbidden)
 POST {{CmsObserver.API_HostAddress}}/admin/entities/{{CmsObserver.EntityToDisable}}/disable
+Authorization: {{CmsObserver.UserAuth}}
+
+###
+
+# 6. Disable entity endpoint with admin credentials
+POST {{CmsObserver.API_HostAddress}}/admin/entities/{{CmsObserver.EntityToDisable}}/disable
+Authorization: {{CmsObserver.AdminAuth}}
 
 ###

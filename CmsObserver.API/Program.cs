@@ -35,6 +35,19 @@ builder.Services.AddAuthorization(options =>
         policy.AuthenticationSchemes.Add(CmsAuthenticationConstants.Scheme);
         policy.RequireAuthenticatedUser();
     });
+
+    options.AddPolicy(CmsAuthenticationConstants.ObserverUserPolicy, policy =>
+    {
+        policy.AuthenticationSchemes.Add(CmsAuthenticationConstants.UsersScheme);
+        policy.RequireAuthenticatedUser();
+    });
+
+    options.AddPolicy(CmsAuthenticationConstants.ObserverAdminPolicy, policy =>
+    {
+        policy.AuthenticationSchemes.Add(CmsAuthenticationConstants.UsersScheme);
+        policy.RequireAuthenticatedUser();
+        policy.RequireRole(CmsAuthenticationConstants.AdminRole);
+    });
 });
 
 var app = builder.Build();
@@ -66,3 +79,4 @@ app.RegisterCmsEventsListener();
 app.RegisterEntitiesEndpoints();
 
 app.Run();
+
